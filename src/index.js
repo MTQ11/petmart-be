@@ -17,7 +17,7 @@ app.get('/',(req,res)=>{
     return res.send("HELLO WORD !!!!!")
 })
 
-mongoose.connect(`mongodb://localhost:27017/Petmart`, {serverSelectionTimeoutMS: 3000})
+mongoose.connect(`mongodb+srv://mtquyen1002:11122001@cluster0.lklpo.mongodb.net/`, {serverSelectionTimeoutMS: 3000})
 .then(()=>{
     console.log("connect mongodb success")
 })
