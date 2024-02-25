@@ -10,7 +10,7 @@ const createUser = (newUser) => {
         try {
             if (checkEmail !== null) {
                 resolve({
-                    status: "OK",
+                    status: "ERR",
                     message: "That email already, change email"
                 })
             }
@@ -42,14 +42,14 @@ const loginUser = (userLogin) => {
         try {
             if (checkUser === null) {
                 resolve({
-                    status: "OK",
+                    status: "ERR",
                     message: "That user not exits"
                 })
             }
             const comparePassword = bcrypt.compareSync(password, checkUser.password)
             if (!comparePassword) {
                 resolve({
-                    status: "OK",
+                    status: "ERR",
                     message: "The password or email is incorrect"
                 })
             }
