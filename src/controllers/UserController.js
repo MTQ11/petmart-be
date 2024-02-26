@@ -2,7 +2,6 @@ const userService = require('../services/UserService')
 
 const createUser = async (req, res) => {
     try {
-        console.log('request:', req.body)
         const { avatar, email, password, confirmPassword } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
         const isCheckEmail = reg.test(email)
@@ -59,7 +58,64 @@ const loginUser = async (req, res) => {
     }
 }
 
+const updateUser = async (req, res) => {    
+    try {
+        const userID = req.params.id
+        const data = req.body
+        if (!userID) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The userId is required'
+            })
+        }
+        const request = await userService.updateUser(userID,data)
+        return res.status(200).json(request)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+
+const deleteUser = async (req, res) => {    
+    try {
+        const userID = req.params.id
+        const token = req.headers
+        if (!userID) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The userId is required'
+
+            })
+        }
+        const request = await userService.deleteUser(userID)
+        return res.status(200).json(request)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+
+const getAllUser = async (req, res) => {    
+    try {
+        const response = await userService.getAllUser()
+        return res.status(200).json(response)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+
+
 module.exports = {
     createUser,
-    loginUser
+    loginUser,
+    updateUser,
+    deleteUser,
+    getAllUser
 }
