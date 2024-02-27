@@ -111,11 +111,32 @@ const getAllUser = async (req, res) => {
     }
 }
 
+const getDetailsUser = async (req, res) => {    
+    try {
+        const userID = req.params.id
+        const token = req.headers
+        if (!userID) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The userId is required'
+
+            })
+        }
+        const request = await userService.getDetailsUser(userID)
+        return res.status(200).json(request)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
 
 module.exports = {
     createUser,
     loginUser,
     updateUser,
     deleteUser,
-    getAllUser
+    getAllUser,
+    getDetailsUser
 }
