@@ -18,6 +18,7 @@ const authMiddleWare = (req, res, next) => {
                 status: 'ERROR'
             })
         }
+        console.log(user.role)
         if (user.role === "admin") {
             next()
             console.log('true')
@@ -29,8 +30,31 @@ const authMiddleWare = (req, res, next) => {
         }
     });
 }
+const authUserMiddleWare = (req, res, next) => {
+    const token = req.headers.token.split(' ')[1]
+    const userId = req.params.id
+    jwt.verify(token,'access_token', function (err, user) {
+        if (err) {
+            return res.status(404).json({
+                message: 'The authemtication',
+                status: 'ERROR'
+            })
+        }
+        console.log(user.role)
+        if (user.role === 'admin' || user?.id === userId) {
+            next()
+        } else {
+            return res.status(404).json({
+                message: 'The authemtication2',
+                status: 'ERROR'
+            })
+        }
+    });
+}
+
 
 
 module.exports = {
     authMiddleWare,
+    authUserMiddleWare
 }
