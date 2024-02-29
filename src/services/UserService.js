@@ -114,14 +114,25 @@ const deleteUser = (id) => {
     })
 }
 
-const getAllUser = () => {
+const getAll = (limit,page) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const data = await User.find().exec()
+            const totalItem = await User.countDocuments()
+            const totalPage = Math.ceil(totalItem/limit)
+            if(page+1>totalPage){
+                resolve({
+                    status: "ERR",
+                    message: "This page is not available",
+                })
+            }
+            const data = await User.find().limit(limit).skip(limit*page).exec()
             resolve({
                 status: "OK",
                 message: "SUCCESS",
-                data: data
+                data: data,
+                total: totalItem,
+                pageCurrent: Number(page + 1),
+                totalPage: totalPage
             })
         }
         catch (e) {
@@ -159,6 +170,6 @@ module.exports = {
     loginUser,
     updateUser,
     deleteUser,
-    getAllUser,
+    getAll,
     getDetailsUser
 }

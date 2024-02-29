@@ -20,7 +20,6 @@ const authAdminMiddleWare = (req, res, next) => {
         }
         if (user.role === "admin") {
             next()
-            console.log('true')
         } else {
             return res.status(404).json({
                 message: 'The authemtication',
@@ -48,7 +47,6 @@ const authManageMiddleWare = (req, res, next) => {
         }
         if (user.role === "manage" || user.role === "admin") {
             next()
-            console.log('true')
         } else {
             return res.status(404).json({
                 message: 'The authemtication',
@@ -76,7 +74,6 @@ const authCustomerMiddleWare = (req, res, next) => {
         }
         if (user.role === "manage" || user.role === "customer" || user.role === "admin") {
             next()
-            console.log('true')
         } else {
             return res.status(404).json({
                 message: 'The authemtication',

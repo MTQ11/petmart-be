@@ -2,14 +2,25 @@ const Product = require("../models/ProductModel")
 const bcrypt = require("bcrypt")
 const { generalAccessToken, generalRefreshAccessToken } = require("./JwtService")
 
-const getAll = () => {
+const getAll = (limit,page) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const data = await Product.find().exec()
+            const totalItem = await Product.countDocuments()
+            const totalPage = Math.ceil(totalItem/limit)
+            if(page+1>totalPage){
+                resolve({
+                    status: "ERR",
+                    message: "This page is not available",
+                })
+            }
+            const data = await Product.find().limit(limit).skip(limit*page).exec()
             resolve({
                 status: "OK",
                 message: "SUCCESS",
-                data: data
+                data: data,
+                total: totalItem,
+                pageCurrent: Number(page + 1),
+                totalPage: totalPage
             })
         }
         catch (e) {

@@ -5,7 +5,6 @@ const createUser = async (req, res) => {
         const { avatar, email, password, confirmPassword } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
         const isCheckEmail = reg.test(email)
-        //console.log('isCheckEmail:', isCheckEmail)
         if (!email || !password || !confirmPassword) {
             return res.status(200).json({
                 status: 'ERR',
@@ -105,9 +104,10 @@ const deleteUser = async (req, res) => {
     }
 }
 
-const getAllUser = async (req, res) => {    
+const getAll = async (req, res) => {    
     try {
-        const response = await userService.getAllUser()
+        const {limit, page} = req.query
+        const response = await userService.getAll(Number(limit) || null, Number(page))
         return res.status(200).json(response)
     }
     catch (error) {
@@ -160,7 +160,7 @@ module.exports = {
     loginUser,
     updateUser,
     deleteUser,
-    getAllUser,
+    getAll,
     getDetailsUser,
     refreshToken
 }
