@@ -52,8 +52,8 @@ const loginUser = async (req, res) => {
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
             secure: false,
-            // sameSite: 'strict',
-            // path: '/',
+            sameSite: 'strict',
+            path: '/',
         })
         return res.status(200).json({newRequest})
     }
@@ -138,6 +138,7 @@ const getDetailsUser = async (req, res) => {
 }
 
 const refreshToken = async (req, res) => {
+    console.log('rftk', req.cookies.refresh_token)
     try {
         let token = req.cookies.refresh_token
         if (!token) {
