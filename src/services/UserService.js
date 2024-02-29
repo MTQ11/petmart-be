@@ -35,7 +35,6 @@ const createUser = (newUser) => {
     })
 }
 
-
 const loginUser = (userLogin) => {
     return new Promise(async (resolve, reject) => {
         const { email, password } = userLogin
@@ -92,7 +91,7 @@ const updateUser = (id, data) => {
     })
 }
 
-const deleteUser = (id, data) => {
+const deleteUser = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkUser = User.findOne({ _id: id })
@@ -115,14 +114,14 @@ const deleteUser = (id, data) => {
     })
 }
 
-const getAllUser = (id, data) => {
+const getAllUser = () => {
     return new Promise(async (resolve, reject) => {
         try {
-            const allUser = await User.find().exec()
+            const data = await User.find().exec()
             resolve({
                 status: "OK",
                 message: "SUCCESS",
-                data: allUser
+                data: data
             })
         }
         catch (e) {
