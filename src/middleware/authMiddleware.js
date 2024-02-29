@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
 dotenv.config()
 
-const authMiddleWare = (req, res, next) => {
+const authAdminMiddleWare = (req, res, next) => {
     const tokenHeader = req.headers.token
     if (!tokenHeader) {
         return res.status(401).json({
@@ -18,7 +18,6 @@ const authMiddleWare = (req, res, next) => {
                 status: 'ERROR'
             })
         }
-        console.log(user.role)
         if (user.role === "admin") {
             next()
             console.log('true')
@@ -30,6 +29,63 @@ const authMiddleWare = (req, res, next) => {
         }
     });
 }
+
+const authManageMiddleWare = (req, res, next) => {
+    const tokenHeader = req.headers.token
+    if (!tokenHeader) {
+        return res.status(401).json({
+            message: 'Missing token',
+            status: 'ERROR'
+        })
+    }
+    const token = req.headers.token.split(' ')[1]
+    jwt.verify(token,'access_token', function (err, user) {
+        if (err) {
+            return res.status(404).json({
+                message: 'The authemtication',
+                status: 'ERROR'
+            })
+        }
+        if (user.role === "manage" || user.role === "admin") {
+            next()
+            console.log('true')
+        } else {
+            return res.status(404).json({
+                message: 'The authemtication',
+                status: 'ERROR'
+            })
+        }
+    });
+}
+
+const authCustomerMiddleWare = (req, res, next) => {
+    const tokenHeader = req.headers.token
+    if (!tokenHeader) {
+        return res.status(401).json({
+            message: 'Missing token',
+            status: 'ERROR'
+        })
+    }
+    const token = req.headers.token.split(' ')[1]
+    jwt.verify(token,'access_token', function (err, user) {
+        if (err) {
+            return res.status(404).json({
+                message: 'The authemtication',
+                status: 'ERROR'
+            })
+        }
+        if (user.role === "manage" || user.role === "customer" || user.role === "admin") {
+            next()
+            console.log('true')
+        } else {
+            return res.status(404).json({
+                message: 'The authemtication',
+                status: 'ERROR'
+            })
+        }
+    });
+}
+
 const authUserMiddleWare = (req, res, next) => {
     const token = req.headers.token.split(' ')[1]
     const userId = req.params.id
@@ -55,6 +111,7 @@ const authUserMiddleWare = (req, res, next) => {
 
 
 module.exports = {
-    authMiddleWare,
+    authAdminMiddleWare,
+    authManageMiddleWare,
     authUserMiddleWare
 }

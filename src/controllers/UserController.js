@@ -22,8 +22,8 @@ const createUser = async (req, res) => {
                 message: 'The password is equal confirmPassword'
             })
         }
-        const request = await userService.createUser(req.body)
-        return res.status(200).json(request)
+        const response = await userService.createUser(req.body)
+        return res.status(200).json(response)
     }
     catch (error) {
         return res.status(404).json({
@@ -81,7 +81,6 @@ const updateUser = async (req, res) => {
 const deleteUser = async (req, res) => {    
     try {
         const userID = req.params.id
-        const token = req.headers
         if (!userID) {
             return res.status(200).json({
                 status: 'ERR',
@@ -114,7 +113,6 @@ const getAllUser = async (req, res) => {
 const getDetailsUser = async (req, res) => {    
     try {
         const userID = req.params.id
-        const token = req.headers
         if (!userID) {
             return res.status(200).json({
                 status: 'ERR',
