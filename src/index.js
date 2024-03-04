@@ -4,8 +4,8 @@ const mongoose = require("mongoose")
 const routes = require("./routes")
 const bodyParser = require("body-parser")
 const cookieParser = require('cookie-parser')
-dotenv.config()
 const cors = require('cors');
+dotenv.config()
 
 const app = express()
 const port = process.env.PORT || 3001

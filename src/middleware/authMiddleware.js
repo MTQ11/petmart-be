@@ -84,7 +84,6 @@ const authCustomerMiddleWare = (req, res, next) => {
 }
 
 const authUserMiddleWare = (req, res, next) => {
-    console.log('reg.header', req.headers)
     const token = req.headers.token.split(' ')[1]
     const userId = req.params.id
     jwt.verify(token,'access_token', function (err, user) {
@@ -94,7 +93,6 @@ const authUserMiddleWare = (req, res, next) => {
                 status: 'ERROR'
             })
         }
-        console.log(user.role)
         if (user.role === 'admin' || user?.id === userId) {
             next()
         } else {
