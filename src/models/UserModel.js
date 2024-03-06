@@ -3,11 +3,16 @@ const userSchema = new mongoose.Schema(
     {
         email: { type: String, required: true, unique: true },
         password: { type: String, required: true },
-        avatar: { type: String },
-        role: {type: String},
-        name: { type: String},
-        address: { type: String},
-        phone: {type: String}
+        role: { type: String, enum: ['customer', 'member', 'admin'], default: 'customer' },
+        information: { 
+            name: { type: String },
+            avatar: { type: String },
+            gender: {type: String},
+            phone: { type: Number },
+            birthday: { type: Date },
+            address: { type: String },
+            note: { type: String },
+        }
     },
     {
         timestamps: true

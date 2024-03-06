@@ -29,7 +29,7 @@ const authAdminMiddleWare = (req, res, next) => {
     });
 }
 
-const authManageMiddleWare = (req, res, next) => {
+const authMemberMiddleWare = (req, res, next) => {
     const tokenHeader = req.headers.token
     if (!tokenHeader) {
         return res.status(401).json({
@@ -108,6 +108,6 @@ const authUserMiddleWare = (req, res, next) => {
 
 module.exports = {
     authAdminMiddleWare,
-    authManageMiddleWare,
+    authMemberMiddleWare,
     authUserMiddleWare
 }

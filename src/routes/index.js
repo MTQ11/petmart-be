@@ -1,11 +1,11 @@
 const  userRouter = require('./UserRouter')
 const  productRouter = require('./ProductRouter')
-const TypeProduct = require('./TypeProductRouter')
+const promotionRouter = require('./PromotionRouter')
 
 const routes = (app) =>{
     app.use('/user',userRouter)
     app.use('/product',productRouter)
-    app.use('/type-product',TypeProduct)
+    app.use('/promotion',promotionRouter)
 }
 
 module.exports = routes
