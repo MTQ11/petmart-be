@@ -138,7 +138,6 @@ const getDetailsUser = async (req, res) => {
 }
 
 const refreshToken = async (req, res) => {
-    console.log('rftk', req.cookies.refresh_token)
     try {
         let token = req.cookies.refresh_token
         if (!token) {

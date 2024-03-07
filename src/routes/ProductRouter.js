@@ -8,5 +8,5 @@ router.get('/create-product', productController.createProduct)
 router.put('/update-product/:id', productController.updateProduct)
 router.get('/get-detail-product/:id', productController.getDetailProduct)
 router.delete('/delete/:id', authMemberMiddleWare, productController.deleteProduct)
-
+router.get('/get-all-type', productController.getAllType)
 module.exports = router
