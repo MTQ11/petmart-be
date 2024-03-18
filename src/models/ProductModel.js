@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema(
         price: { type: Number, required: true },
         costPrice: { type: Number, required: true },
         status: { type: String, required: true },
+        selled: { type: Number },
         note: { type: String },
         promotion: { type: mongoose.Schema.Types.ObjectId, ref: 'Promotion', required: true } // Sử dụng promotionSchema ở đây
     },

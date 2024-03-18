@@ -24,22 +24,22 @@ const getAll = (limit, page, sort, filter) => {
           totalPage: totalPage,
         });
       }
-    //   if (sort) {
-    //     const objectSort = {};
-    //     objectSort[sort[1]] = sort[0];
-    //     const dataSort = await Product.find()
-    //       .limit(limit)
-    //       .skip(page * limit)
-    //       .sort(objectSort);
-    //     resolve({
-    //       status: "OK",
-    //       message: "Success",
-    //       data: dataSort,
-    //       total: totalItem,
-    //       pageCurrent: Number(page + 1),
-    //       totalPage: Math.ceil(totalItem / limit),
-    //     });
-    //   }
+      if (sort) {
+        const objectSort = {};
+        objectSort[sort[1]] = sort[0];
+        const dataSort = await Product.find()
+          .limit(limit)
+          .skip(page * limit)
+          .sort(objectSort);
+        resolve({
+          status: "OK",
+          message: "Success",
+          data: dataSort,
+          total: totalItem,
+          pageCurrent: Number(page + 1),
+          totalPage: Math.ceil(totalItem / limit),
+        });
+      }
       if (page + 1 > totalPage) {
         resolve({
           status: "ERR",

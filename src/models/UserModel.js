@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
             birthday: { type: Date },
             address: { type: String },
             note: { type: String },
+            city: { type: String },
         }
     },
     {
