@@ -50,6 +50,7 @@ mongoose.connect(`mongodb+srv://mtquyen1002:11122001@cluster0.lklpo.mongodb.net/
     console.log(err)
 })
 
+
 app.listen(port,()=>{
     console.log("Sever is running port: ", port)
 })
