@@ -1,17 +1,20 @@
 const mongoose = require('mongoose');
+const Product = require('./ProductModel');
 
 const receiptSchema = new mongoose.Schema({
     receiptItems: [
         {
-            name: { type: String, required: true },
-            amount: { type: Number, required: true },
-            image: { type: String, required: true },
+            name: { type: String},
+            unit: { type: String},
+            type: { type: String},
+            image: { type: String },
+            amount: { type: Number, required: true},
             price: { type: Number, required: true },
             product: {
                 type: mongoose.Schema.Types.ObjectId,
                 ref: 'Product',
-                required: true,
             },
+            isNewProduct: { type: Boolean, default: false },
         },
     ],
     receivedFrom: {
@@ -20,21 +23,39 @@ const receiptSchema = new mongoose.Schema({
         phone: { type: Number, required: true },
         note: { type: String },
     },
-    receivedBy: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true,
-        validate: {
-            validator: async function (userId) {
-                const user = await this.model('User').findById(userId);
-                return user && (user.role === 'member' || user.role === 'admin');
-            },
-            message: 'Only users with manage or admin role can receive receipts.'
+    receivedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    receivedAt: { type: Date, default: Date.now },
+}, {
+    timestamps: true,
+});
+
+receiptSchema.methods.createProductFromReceipt = async function() {
+    try {
+        const newProducts = [];
+        for (const item of this.receiptItems) {
+            if (item.isNewProduct) {
+                const newProduct = new Product({
+                    name: item.name,
+                    image: item.image,
+                    type: item.type,
+                    countInStock: 0,
+                    unit: item.unit,
+                    price: 0,
+                    costPrice: item.price,
+                    status: 'active',
+                    selled: 0,
+                    note: '',
+                    promotion: null,
+                });
+                await newProduct.save();
+                newProducts.push(newProduct);
+            }
         }
-    }, // Người nhận phiếu
-    receivedAt: { type: Date, default: Date.now }, // Ngày nhận phiếu
-},
-    {
-        timestamps: true,
-    });
+        return newProducts;
+    } catch (error) {
+        throw new Error('Error creating product from receipt: ' + error.message);
+    }
+};
 
 const Receipt = mongoose.model('Receipt', receiptSchema);
 module.exports = Receipt;

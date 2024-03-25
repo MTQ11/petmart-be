@@ -16,15 +16,15 @@ const getAll = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const { name, image, type, countInStock, unit, price, costPrice, status, description } = req.body
-        if(!name || !image || !type || !countInStock || !unit || !price || !costPrice || !status){
-            return res.status(200).json({
+        const { name, image, type, countInStock, unit, price, costPrice, status } = req.body
+        if(!name || !type ){
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
         }
         if(countInStock < 0 || price < 0 || costPrice < 0) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'Count in stock, price, and cost price must be non-negative'
             })
@@ -44,7 +44,7 @@ const updateProduct = async (req, res) => {
         const productID = req.params.id
         const data = req.body
         if (!productID) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'The productID is required'
             })
@@ -83,7 +83,7 @@ const deleteProduct = async (req, res) => {
     try {
         const productID = req.params.id
         if (!productID) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'The productId is required'
 

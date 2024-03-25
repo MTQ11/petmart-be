@@ -79,6 +79,9 @@ const updateUser = (id, data) => {
                 })
             }
             const update = await User.findByIdAndUpdate(id, data, { new: true })
+            console.log('data', data)
+            console.log('update', update)
+
             resolve({
                 status: "OK",
                 message: "SUCCESS",
