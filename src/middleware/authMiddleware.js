@@ -45,7 +45,7 @@ const authMemberMiddleWare = (req, res, next) => {
                 status: 'ERROR'
             })
         }
-        if (user.role === "manage" || user.role === "admin") {
+        if (user.role === "member" || user.role === "admin") {
             next()
         } else {
             return res.status(404).json({
@@ -85,15 +85,16 @@ const authCustomerMiddleWare = (req, res, next) => {
 
 const authUserMiddleWare = (req, res, next) => {
     const token = req.headers.token.split(' ')[1]
-    const userId = req.params.id
+    const userId = req.params.user
     jwt.verify(token,'access_token', function (err, user) {
+        console.log("user?.id",user?.id)
         if (err) {
             return res.status(404).json({
                 message: 'The authemtication',
                 status: 'ERROR'
             })
         }
-        if (user.role === 'admin' || user?.id === userId) {
+        if (user?.id === userId) {
             next()
         } else {
             return res.status(404).json({

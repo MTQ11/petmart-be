@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const productSchema = new mongoose.Schema(
     {
         name: { type: String, required: true, unique: true },
-        image: { type: String, required: true },
+        image: { type: String},
         type: { type: String, required: true },
         countInStock: { type: Number, required: true },
         unit: { type: String, required: true },
@@ -12,7 +12,7 @@ const productSchema = new mongoose.Schema(
         status: { type: String, required: true },
         selled: { type: Number },
         note: { type: String },
-        promotion: { type: mongoose.Schema.Types.ObjectId, ref: 'Promotion', required: true } // Sử dụng promotionSchema ở đây
+        promotion: { type: mongoose.Schema.Types.ObjectId, ref: 'Promotion'} // Sử dụng promotionSchema ở đây
     },
     {
         timestamps: true,
