@@ -66,7 +66,7 @@ const loginUser = async (req, res) => {
 
 const updateUser = async (req, res) => {    
     try {
-        const userID = req.params.id
+        const userID = req.params.user
         const data = req.body
         if (!userID) {
             return res.status(400).json({
@@ -86,7 +86,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {    
     try {
-        const userID = req.params.id
+        const userID = req.params.user
         if (!userID) {
             return res.status(400).json({
                 status: 'ERR',
@@ -119,7 +119,7 @@ const getAll = async (req, res) => {
 
 const getDetailsUser = async (req, res) => {    
     try {
-        const userID = req.params.id
+        const userID = req.params.user
         if (!userID) {
             return res.status(400).json({
                 status: 'ERR',

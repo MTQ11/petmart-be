@@ -14,7 +14,7 @@ const authAdminMiddleWare = (req, res, next) => {
     jwt.verify(token,'access_token', function (err, user) {
         if (err) {
             return res.status(404).json({
-                message: 'The authemtication',
+                message: 'The authemtication admin',
                 status: 'ERROR'
             })
         }
@@ -22,7 +22,7 @@ const authAdminMiddleWare = (req, res, next) => {
             next()
         } else {
             return res.status(404).json({
-                message: 'The authemtication',
+                message: 'The authemtication 2',
                 status: 'ERROR'
             })
         }
@@ -90,7 +90,7 @@ const authUserMiddleWare = (req, res, next) => {
         console.log("user?.id",user?.id)
         if (err) {
             return res.status(404).json({
-                message: 'The authemtication',
+                message: 'The authemtication user',
                 status: 'ERROR'
             })
         }
@@ -98,7 +98,7 @@ const authUserMiddleWare = (req, res, next) => {
             next()
         } else {
             return res.status(404).json({
-                message: 'The authemtication2',
+                message: 'The authemtication 2',
                 status: 'ERROR'
             })
         }
