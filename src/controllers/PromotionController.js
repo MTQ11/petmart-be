@@ -18,7 +18,7 @@ const createPromotion = async (req, res) => {
     try {
         const { name, startday, endday, discount, note} = req.body
         if(!name || !startday || !endday || !discount){
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
@@ -32,7 +32,7 @@ const createPromotion = async (req, res) => {
 
         // Kiểm tra startday phải trước endday
         if (startday >= endday) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'Start day must be before end day'
             });
@@ -52,7 +52,7 @@ const updatePromotion = async (req, res) => {
         const promotionID = req.params.id
         const data = req.body
         if (!promotionID) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'The promotionID is required'
             })
