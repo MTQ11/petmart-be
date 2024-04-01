@@ -14,8 +14,8 @@ const getAllOrder = async (req, res) => {
 
 const createOrder = async (req, res) => {
     try { 
-        const { paymentMethod, itemsPrice, shippingPrice, totalPrice, fullName, address, city, phone } = req.body
-        if (!paymentMethod || !itemsPrice || !shippingPrice || !totalPrice || !fullName || !address || !city || !phone) {
+        const {shippingAddress, paymentMethod, itemsPrice, shippingPrice, totalPrice,  } = req.body
+        if (!paymentMethod || !itemsPrice || !shippingPrice || !totalPrice || !shippingAddress.fullName || !shippingAddress.address || !shippingAddress.city || !shippingAddress.phone) {
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input is required'
@@ -34,7 +34,7 @@ const getDetailsOrder = async (req, res) => {
     try {
         const orderId = req.params.id
         if (!orderId) {
-            return res.status(400).json({
+            return res.status(200).json({
                 status: 'ERR',
                 message: 'The userId is required'
             })
