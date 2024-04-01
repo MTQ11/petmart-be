@@ -105,6 +105,7 @@ const updateProduct = (id, data) => {
   return new Promise(async (resolve, reject) => {
     try {
       const checkProduct = await Product.findOne({ _id: id }).exec();
+      console.log("checkProduct", checkProduct);
       if (!checkProduct) {
         resolve({
           status: "ERR",
