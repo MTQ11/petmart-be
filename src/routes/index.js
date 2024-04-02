@@ -4,6 +4,8 @@ const promotionRouter = require('./PromotionRouter')
 const orderRouter = require('./OrderRouter')
 const PaymentRouter = require('./PaymentRouter')
 const recieptRouter = require('./RecieptRouter')
+const postRouter = require('./PostRouter')
+const commemtRouter = require('./CommentRouter')
 
 
 const routes = (app) =>{
@@ -12,7 +14,8 @@ const routes = (app) =>{
     app.use('/promotion',promotionRouter)
     app.use('/order',orderRouter)
     app.use('/payment', PaymentRouter)
-
+    app.use('/post', postRouter)
+    app.use('/comment', commemtRouter)
     app.use('/receipt',recieptRouter)
 }
 

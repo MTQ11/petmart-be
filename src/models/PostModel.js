@@ -2,15 +2,20 @@ const mongoose = require('mongoose');
 
 const postSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    content: { type: String, required: true },
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Tham chiếu đến người dùng tạo bài viết
-    image: {type: String},
-    comments: [{
-        content: { type: String, required: true },
-        user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }, // Tham chiếu đến người dùng tạo bình luận
-        createdAt: { type: Date, default: Date.now }
-    }] // Mảng các bình luận
-}, { timestamps: true });
+    sections: [{
+        sectionTitle: { type: String, required: true },
+        content: { type: String, required: true }
+    }],
+    category: { type: String },
+    views: { type: Number, default: 0 },
+    tags: [{ type: String }],
+    images: [{ 
+       url: { type: String},
+       alt: {  type: String } 
+    }],
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } 
+}
+, { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);
 module.exports = Post;
