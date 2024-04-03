@@ -33,6 +33,26 @@ const createPost = async (req, res) => {
     }
 }
 
+const getDetailPost = async (req, res) => {    
+    try {
+        const postId = req.params.id
+        if (!postId) {
+            return res.status(200).json({
+                status: 'ERR',
+                message: 'The post is required'
+
+            })
+        }
+        const request = await postService.getDetailPost(postId)
+        return res.status(200).json(request)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+
 const updatePost = async (req, res) => {
     try {
         const postID = req.params.id
@@ -76,6 +96,7 @@ const deletePost = async (req, res) => {
 
 module.exports = {
     getAll,
+    getDetailPost,
     createPost,
     updatePost,
     deletePost

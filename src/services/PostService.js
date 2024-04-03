@@ -49,6 +49,28 @@ const createPost = (data) => {
     })
 }
 
+const getDetailPost = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const post = await Post.findOne({ _id: id });
+        if (post === null) {
+          resolve({
+            status: "ERR",
+            message: "The post is not defined",
+          });
+        }
+  
+        resolve({
+          status: "OK",
+          message: "SUCCESS",
+          data: post,
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
+  };
+
 const updatePost = (id,data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -98,6 +120,7 @@ const deletePost = (id) => {
 
 module.exports = {
     getAll,
+    getDetailPost,
     createPost,
     updatePost,
     deletePost
