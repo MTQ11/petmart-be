@@ -164,6 +164,19 @@ const getDetailsUser = (id, data) => {
     })
 }
 
+const getUsersInfo = async () => {
+    try {
+        const users = await User.find().select('information.name information.avatar email').exec();
+        return {
+            status: "OK",
+            message: "SUCCESS",
+            data: users
+        };
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
 
 module.exports = {
     createUser,
@@ -171,5 +184,6 @@ module.exports = {
     updateUser,
     deleteUser,
     getAll,
-    getDetailsUser
+    getDetailsUser,
+    getUsersInfo
 }

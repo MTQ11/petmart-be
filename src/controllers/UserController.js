@@ -117,6 +117,17 @@ const getAll = async (req, res) => {
     }
 }
 
+const getUsersInfo = async (req, res) => {
+    try {
+        const usersInfo = await userService.getUsersInfo();
+        return res.status(200).json(usersInfo);
+    } catch (error) {
+        return res.status(404).json({
+            message: error
+        });
+    }
+}
+
 const getDetailsUser = async (req, res) => {    
     try {
         const userID = req.params.user
@@ -177,5 +188,6 @@ module.exports = {
     deleteUser,
     getAll,
     getDetailsUser,
-    refreshToken
+    refreshToken,
+    getUsersInfo
 }
