@@ -9,13 +9,10 @@ const postSchema = new mongoose.Schema({
     category: { type: String },
     views: { type: Number, default: 0 },
     tags: [{ type: String }],
-    images: [{ 
-       url: { type: String},
-       alt: {  type: String } 
-    }],
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true } 
+    images: [{ type: String }],
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }
-, { timestamps: true });
+    , { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);
 module.exports = Post;

@@ -4,7 +4,7 @@ const { generalAccessToken, generalRefreshAccessToken } = require("./JwtService"
 
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
-        const { avatar, email, password, confirmPassword } = newUser
+        const { avatar, email, password, confirmPassword, information} = newUser
         const hash = bcrypt.hashSync(password, 10)
         const checkEmail = await User.findOne({ email: email })
         try {
@@ -19,7 +19,8 @@ const createUser = (newUser) => {
                 email,
                 password: hash,
                 confirmPassword: hash,
-                role: "customer"
+                role: "customer",
+                information
             })
             if (createUser) {
                 resolve({
@@ -53,6 +54,7 @@ const loginUser = (userLogin) => {
                     message: "The password or email is incorrect"
                 })
             }
+
             const access_token = await generalAccessToken({ id: checkUser.id, role: checkUser.role })
             const refresh_token = await generalRefreshAccessToken({ id: checkUser.id, role: checkUser.role })
             resolve({
