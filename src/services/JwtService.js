@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 const generalAccessToken = async (payload) => {
     const access_token = jwt.sign({
         ...payload
-    }, 'access_token', {expiresIn: '30s'})
+    }, 'access_token', {expiresIn: '30d'})
     return access_token
 }
 
