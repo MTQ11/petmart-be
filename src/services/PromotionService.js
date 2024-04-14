@@ -61,7 +61,6 @@ const updatePromotion = (id,data) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkPromotion = await Promotion.findOne({_id: id}).exec()
-            console.log("checkPromotion",checkPromotion)
             if(!checkPromotion){
                 resolve({
                     status: "ERR",

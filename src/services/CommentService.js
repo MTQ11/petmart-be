@@ -64,7 +64,6 @@ const updateComment = (id,data) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkComment = await Comment.findOne({_id: id}).exec()
-            console.log("checkComment",checkComment)
             if(!checkComment){
                 resolve({
                     status: "ERR",

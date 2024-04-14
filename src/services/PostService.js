@@ -75,7 +75,6 @@ const updatePost = (id,data) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkPost = await Post.findOne({_id: id}).exec()
-            console.log("checkPost",checkPost)
             if(!checkPost){
                 resolve({
                     status: "ERR",

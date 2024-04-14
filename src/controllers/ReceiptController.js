@@ -42,7 +42,6 @@ const getDetailsReceipt = async (req, res) => {
         const response = await ReceiptService.getReceiptDetails(receiptId)
         return res.status(200).json(response)
     } catch (e) {
-        // console.log(e)
         return res.status(404).json({
             message: e
         })
@@ -70,9 +69,8 @@ const getAllReceiptDetails = async (req, res) => {
 const deleteReceipt = async (req, res) => {    
     try {
         const receiptID = req.params.id
-        console.log(receiptID)
         if (!receiptID) {
-            return res.status(200).json({
+            return res.status(400).json({
                 status: 'ERR',
                 message: 'The receiptId is required'
 

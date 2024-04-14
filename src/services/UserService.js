@@ -4,7 +4,7 @@ const { generalAccessToken, generalRefreshAccessToken } = require("./JwtService"
 
 const createUser = (newUser) => {
     return new Promise(async (resolve, reject) => {
-        const { avatar, email, password, confirmPassword, information} = newUser
+        const { avatar, email, password, confirmPassword, role, information} = newUser
         const hash = bcrypt.hashSync(password, 10)
         const checkEmail = await User.findOne({ email: email })
         try {
@@ -19,7 +19,7 @@ const createUser = (newUser) => {
                 email,
                 password: hash,
                 confirmPassword: hash,
-                role: "customer",
+                role: role ? role : 'customer',
                 information
             })
             if (createUser) {
@@ -54,7 +54,6 @@ const loginUser = (userLogin) => {
                     message: "The password or email is incorrect"
                 })
             }
-
             const access_token = await generalAccessToken({ id: checkUser.id, role: checkUser.role })
             const refresh_token = await generalRefreshAccessToken({ id: checkUser.id, role: checkUser.role })
             resolve({
@@ -71,6 +70,29 @@ const loginUser = (userLogin) => {
 }
 
 const updateUser = (id, data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const checkUser = User.findOne({ _id: id })
+            if (checkUser === null) {
+                resolve({
+                    status: 'ERR',
+                    message: 'The user is not defined'
+                })
+            }
+            const update = await User.findByIdAndUpdate(id, data, { new: true })
+            resolve({
+                status: "OK",
+                message: "SUCCESS",
+                data: update
+            })
+        }
+        catch (e) {
+            reject(e)
+        }
+    })
+}
+
+const adminUpdateUser = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
             const checkUser = User.findOne({ _id: id })
@@ -184,6 +206,7 @@ module.exports = {
     createUser,
     loginUser,
     updateUser,
+    adminUpdateUser,
     deleteUser,
     getAll,
     getDetailsUser,

@@ -1,5 +1,6 @@
 const userService = require('../services/UserService')
 const JwtService = require('../services/JwtService')
+
 const createUser = async (req, res) => {
     try {
         const { avatar, email, password, confirmPassword} = req.body
@@ -49,6 +50,9 @@ const loginUser = async (req, res) => {
         }
         const request = await userService.loginUser(req.body)
         const { refresh_token, ...newRequest } = request
+        if(newRequest.status == "ERR"){
+            return res.status(400).json({newRequest})
+        }
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
             secure: false,
@@ -68,6 +72,7 @@ const updateUser = async (req, res) => {
     try {
         const userID = req.params.user
         const data = req.body
+
         if (!userID) {
             return res.status(400).json({
                 status: 'ERR',
@@ -75,6 +80,27 @@ const updateUser = async (req, res) => {
             })
         }
         const request = await userService.updateUser(userID,data)
+        return res.status(200).json(request)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+
+const adminUpdateUser = async (req, res) => {    
+    try {
+        const userID = req.params.user
+        const data = req.body
+
+        if (!userID) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The userId is required'
+            })
+        }
+        const request = await userService.adminUpdateUser(userID,data)
         return res.status(200).json(request)
     }
     catch (error) {
@@ -185,6 +211,7 @@ module.exports = {
     loginUser,
     logoutUser,
     updateUser,
+    adminUpdateUser,
     deleteUser,
     getAll,
     getDetailsUser,

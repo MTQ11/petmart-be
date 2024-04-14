@@ -7,6 +7,8 @@ const Product = require("../models/ProductModel");
 const createReceipt = async (receiptData) => {
   try {
     const { receiptItems, receivedFrom, receivedBy } = receiptData;
+    
+    let totalPrice = 0; // Khởi tạo totalPrice
 
     const updatedProducts = [];
 
@@ -30,6 +32,9 @@ const createReceipt = async (receiptData) => {
           { new: true }
         );
         updatedProducts.push(updatedProduct);
+
+        // Tính tổng giá trị cho receipt
+        totalPrice += item.amount * item.price;
       } else {
         // Nếu sản phẩm là sản phẩm mới
         const newProduct = new Product({
@@ -47,13 +52,17 @@ const createReceipt = async (receiptData) => {
         });
         const savedProduct = await newProduct.save();
         updatedProducts.push(savedProduct);
+
+        // Tính tổng giá trị cho receipt
+        totalPrice += item.amount * item.price;
       }
     }
 
     const receipt = new Receipt({
       receiptItems,
       receivedFrom,
-      receivedBy
+      receivedBy,
+      totalPrice // Thêm totalPrice vào đối tượng receipt
     });
 
     await receipt.save();
@@ -63,6 +72,7 @@ const createReceipt = async (receiptData) => {
     throw new Error('Error creating receipt: ' + error.message);
   }
 };
+
 
 
 
@@ -144,7 +154,6 @@ const getAllReceiptDetails = (id) => {
 const deleteReceipt = (id) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // Tìm receipt dựa trên ID
       const receipt = await Receipt.findById(id);
       if (!receipt) {
         resolve({
@@ -164,14 +173,8 @@ const deleteReceipt = (id) => {
             $inc: { countInStock: -item.amount }
           },
           { new: true }
-        );
-        if (!productData) {
-          return {
-            status: "ERR",
-            message: "Product with ID " + item.product + " does not exist or insufficient stock.",
-          };
-        }
-      });
+        )
+      })
 
       const results = await Promise.all(promises);
       const errorResult = results.find(result => result && result.status === "ERR");

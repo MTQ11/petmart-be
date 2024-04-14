@@ -23,6 +23,7 @@ const receiptSchema = new mongoose.Schema({
         phone: { type: Number, required: true },
         note: { type: String },
     },
+    totalPrice: { type: Number, required: true },
     receivedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
     receivedAt: { type: Date, default: Date.now },
 }, {
