@@ -188,30 +188,41 @@ const reportPost = async () => {
     }
 };
 
-const reportProduct = async () => {
-    try {
-        const result = await Product.aggregate([
-            {
-                $group: {
-                    _id: "$type",
-                    totalSelled: { $sum: "$selled" }
-                }
-            },
-            {
-                $project: {
-                    _id: 0,
-                    type: "$_id",
-                    totalSelled: 1
-                }
-            }
-        ]);
-        return result;
-    } catch (error) {
-        console.error('Error reporting products:', error);
-        throw error;
-    }
-};
-
+// const reportProduct = async () => {
+//     try {
+//         const result = await Product.aggregate([
+//             {
+//                 $lookup: {
+//                     from: 'typeproducts', // Tên bảng chứa nhóm sản phẩm
+//                     localField: 'type', // Trường trong product lưu trữ id tham chiếu tới nhóm sản phẩm
+//                     foreignField: '_id', // Trường trong nhóm sản phẩm lưu trữ id nhóm sản phẩm
+//                     as: 'productType' // Tên của trường mới trong mảng kết quả, chứa thông tin về nhóm sản phẩm
+//                 }
+//             },
+//             {
+//                 $unwind: '$productType' // Bỏ qua mảng và tạo một bản ghi cho mỗi phần tử trong mảng
+//             },
+//             {
+//                 $group: {
+//                     _id: '$productType._id', // Nhóm theo id của nhóm sản phẩm
+//                     type: { $first: '$productType.name' }, // Lấy tên của nhóm sản phẩm
+//                     totalSelled: { $sum: '$selled' } // Tính tổng số lượng đã bán của sản phẩm trong nhóm
+//                 }
+//             },
+//             {
+//                 $project: {
+//                     _id: 0, // Ẩn id nhóm sản phẩm
+//                     type: 1, // Hiển thị tên nhóm sản phẩm
+//                     totalSelled: 1 // Hiển thị tổng số lượng đã bán
+//                 }
+//             }
+//         ]);
+//         return result;
+//     } catch (error) {
+//         console.error('Error reporting products:', error);
+//         throw error;
+//     }
+// };
 
 
 module.exports = {
@@ -220,5 +231,5 @@ module.exports = {
     startBox,
     reportUser,
     reportPost,
-    reportProduct
+    //reportProduct
 }
