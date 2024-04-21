@@ -22,7 +22,6 @@ const sendEmailCreateOrder = async (email,orderItems) => {
     listItem += `<div>
     <div>
       Bạn đã đặt sản phẩm <b>${order.name}</b> với số lượng: <b>${order.amount}</b> và giá là: <b>${order.price} VND</b></div>
-      <div>Bên dưới là hình ảnh của sản phẩm</div>
     </div>`
     attachImage.push({path: order?.image})
   })
@@ -34,7 +33,7 @@ const sendEmailCreateOrder = async (email,orderItems) => {
     subject: "Bạn đã đặt hàng tại PetMart", // Subject line
     text: "Hello world?", // plain text body
     html: `<div><b>Bạn đã đặt hàng thành công tại PetMart</b></div> ${listItem}`,
-    // attachments: attachImage,
+    attachments: attachImage,
   });
 }
 
