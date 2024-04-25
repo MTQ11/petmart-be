@@ -5,23 +5,44 @@ const {
   generalRefreshAccessToken,
 } = require("./JwtService");
 
-const getAll = (limit, page, sort, filter) => {
+const getAll = (limit, page, sort, filter, keysearch) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const totalItem = await Product.countDocuments();
-      const totalPage = Math.ceil(totalItem / limit);
+      let totalItem = await Product.countDocuments();
+      let totalPage = Math.ceil(totalItem / limit);
       if (filter) {
         const label = filter[0];
         const escapedValue = filter[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const regex = new RegExp(escapedValue, 'i');
-        const dataFilter = await Product.find({ [label]: regex })
+        const dataFilter = await Product.find({ [label]: filter[1] });
+        let totalItem = dataFilter.length
+        let totalPage = Math.ceil(totalItem / limit);
+        resolve({
+          status: "OK",
+          message: "Success",
+          data: dataFilter,
+          total: dataFilter.length,
+          pageCurrent: Number(page + 1),
+          totalPage: totalPage,
+        });
+      }
+      if (keysearch) {
+        const escapedValue = keysearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(escapedValue, 'i');
+        const dataFilter = await Product.find({
+          $or: [
+            { name: regex },
+            { idProduct: regex }
+          ]
+        });
+        totalItem = dataFilter.length
         resolve({
           status: "OK",
           message: "Success",
           data: dataFilter,
           total: totalItem,
-          pageCurrent: Number(page + 1),
-          totalPage: totalPage,
+          // pageCurrent: Number(page + 1),
+          // totalPage: totalPage,
         });
       }
       if (sort) {
@@ -46,10 +67,7 @@ const getAll = (limit, page, sort, filter) => {
           message: "This page is not available",
         });
       }
-      const data = await Product.find()
-        .limit(limit)
-        .skip(limit * page)
-        .exec();
+      const data = await Product.find().limit(limit).skip(limit * page).exec();
       resolve({
         status: "OK",
         message: "SUCCESS",
@@ -66,23 +84,13 @@ const getAll = (limit, page, sort, filter) => {
 
 const createProduct = (data) => {
   return new Promise(async (resolve, reject) => {
-    const {
-      name,
-      image,
-      type,
-      countInStock,
-      unit,
-      price,
-      costPrice,
-      status,
-      description,
-    } = data;
-    const checkProduct = await Product.findOne({ name });
+    const { idProduct } = data;
+    const checkProduct = await Product.findOne({ idProduct });
     try {
       if (checkProduct) {
         resolve({
           status: "ERR",
-          message: "Product already exists",
+          message: "ID Product already exists",
         });
       }
       const createProduct = await Product.create({

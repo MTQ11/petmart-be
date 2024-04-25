@@ -20,7 +20,7 @@ const receiptSchema = new mongoose.Schema({
     receivedFrom: {
         fullName: { type: String, required: true },
         address: { type: String, required: true },
-        phone: { type: Number, required: true },
+        phone: { type: String, required: true },
         note: { type: String },
     },
     totalPrice: { type: Number, required: true },

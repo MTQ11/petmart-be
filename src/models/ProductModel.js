@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const productSchema = new mongoose.Schema(
     {
-        name: { type: String, required: true, unique: true },
+        idProduct: {type: String, required: true, unique: true},
+        name: { type: String, required: true },
         image: { type: String},
         type: { type: mongoose.Schema.Types.ObjectId, ref: 'TypeProduct', required: true },
         countInStock: { type: Number, required: true },
@@ -12,7 +13,7 @@ const productSchema = new mongoose.Schema(
         status: { type: String, required: true },
         selled: { type: Number },
         note: { type: String },
-        promotion: { type: mongoose.Schema.Types.ObjectId, ref: 'Promotion'} // Sử dụng promotionSchema ở đây
+        promotion: { type: mongoose.Schema.Types.ObjectId, ref: 'Promotion'}
     },
     {
         timestamps: true,

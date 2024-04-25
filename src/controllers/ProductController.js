@@ -3,8 +3,8 @@ const JwtService = require('../services/JwtService')
 
 const getAll = async (req, res) => {    
     try {
-        const {limit, page, sort, filter} = req.query
-        const response = await productService.getAll(Number(limit) || 8, Number(page) || 0, sort, filter)
+        const {limit, page, sort, filter, keysearch} = req.query
+        const response = await productService.getAll(Number(limit) || 0, Number(page) || 0, sort, filter, keysearch)
         return res.status(200).json(response)
     }
     catch (error) {
@@ -16,8 +16,8 @@ const getAll = async (req, res) => {
 
 const createProduct = async (req, res) => {
     try {
-        const { name, image, type, countInStock, unit, price, costPrice, status } = req.body
-        if(!name || !type ){
+        const {idProduct, name, image, type, countInStock, unit, price, costPrice, status } = req.body
+        if(!idProduct || !name || !type ){
             return res.status(400).json({
                 status: 'ERR',
                 message: 'The input is required'

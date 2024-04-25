@@ -3,7 +3,7 @@ const JwtService = require('../services/JwtService')
 
 const createUser = async (req, res) => {
     try {
-        const { avatar, email, password, confirmPassword} = req.body
+        const { avatar, email, password, confirmPassword } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
         const isCheckEmail = reg.test(email)
         if (!email || !password || !confirmPassword) {
@@ -34,7 +34,7 @@ const createUser = async (req, res) => {
 
 const loginUser = async (req, res) => {
     try {
-        const {email, password} = req.body
+        const { email, password } = req.body
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
         const isCheckEmail = reg.test(email)
         if (!email || !password) {
@@ -50,8 +50,8 @@ const loginUser = async (req, res) => {
         }
         const request = await userService.loginUser(req.body)
         const { refresh_token, ...newRequest } = request
-        if(newRequest.status == "ERR"){
-            return res.status(400).json({newRequest})
+        if (newRequest.status == "ERR") {
+            return res.status(400).json({ newRequest })
         }
         res.cookie('refresh_token', refresh_token, {
             httpOnly: true,
@@ -59,7 +59,7 @@ const loginUser = async (req, res) => {
             sameSite: 'strict',
             path: '/',
         })
-        return res.status(200).json({newRequest, refresh_token })
+        return res.status(200).json({ newRequest, refresh_token })
     }
     catch (error) {
         return res.status(404).json({
@@ -68,7 +68,7 @@ const loginUser = async (req, res) => {
     }
 }
 
-const updateUser = async (req, res) => {    
+const updateUser = async (req, res) => {
     try {
         const userID = req.params.user
         const data = req.body
@@ -79,7 +79,7 @@ const updateUser = async (req, res) => {
                 message: 'The userId is required'
             })
         }
-        const request = await userService.updateUser(userID,data)
+        const request = await userService.updateUser(userID, data)
         return res.status(200).json(request)
     }
     catch (error) {
@@ -89,7 +89,7 @@ const updateUser = async (req, res) => {
     }
 }
 
-const adminUpdateUser = async (req, res) => {    
+const adminUpdateUser = async (req, res) => {
     try {
         const userID = req.params.user
         const data = req.body
@@ -100,7 +100,7 @@ const adminUpdateUser = async (req, res) => {
                 message: 'The userId is required'
             })
         }
-        const request = await userService.adminUpdateUser(userID,data)
+        const request = await userService.adminUpdateUser(userID, data)
         return res.status(200).json(request)
     }
     catch (error) {
@@ -110,7 +110,7 @@ const adminUpdateUser = async (req, res) => {
     }
 }
 
-const deleteUser = async (req, res) => {    
+const deleteUser = async (req, res) => {
     try {
         const userID = req.params.user
         if (!userID) {
@@ -130,10 +130,35 @@ const deleteUser = async (req, res) => {
     }
 }
 
-const getAll = async (req, res) => {    
+const getAll = async (req, res) => {
     try {
-        const {limit, page} = req.query
-        const response = await userService.getAll(Number(limit) || null, Number(page))
+        const { limit, page, filter, sort, keysearch } = req.query
+        const response = await userService.getAll(Number(limit) || null, Number(page), filter, sort, keysearch)
+        return res.status(200).json(response)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+
+const getAllCustomer = async (req, res) => {
+    try {
+        const { limit, page, sort, filter, keysearch } = req.query
+        const response = await userService.getAllCustomer(Number(limit) || 0, Number(page) || 0, sort, filter, keysearch)
+        return res.status(200).json(response)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+const getAllMember = async (req, res) => {
+    try {
+        const { limit, page, sort, filter, keysearch } = req.query
+        const response = await userService.getAllMember(Number(limit) || 0, Number(page) || 0, sort, filter, keysearch)
         return res.status(200).json(response)
     }
     catch (error) {
@@ -154,7 +179,7 @@ const getUsersInfo = async (req, res) => {
     }
 }
 
-const getDetailsUser = async (req, res) => {    
+const getDetailsUser = async (req, res) => {
     try {
         const userID = req.params.user
         if (!userID) {
@@ -214,6 +239,8 @@ module.exports = {
     adminUpdateUser,
     deleteUser,
     getAll,
+    getAllCustomer,
+    getAllMember,
     getDetailsUser,
     refreshToken,
     getUsersInfo

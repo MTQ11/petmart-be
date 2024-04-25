@@ -8,5 +8,6 @@ router.get('/startbox',authMemberMiddleWare, ReportController.startBox)
 router.get('/report-user',authMemberMiddleWare, ReportController.reportUser)
 router.get('/report-post',authMemberMiddleWare, ReportController.reportPost)
 router.get('/report-product',authMemberMiddleWare, ReportController.reportProduct)
+router.get('/statistics-revenue',authMemberMiddleWare, ReportController.statisticsRevenue)
 
 module.exports = router

@@ -69,11 +69,24 @@ const reportProduct = async (req, res)=>{
     }
 }
 
+const statisticsRevenue = async (req, res)=>{
+    const {option} = req.query
+    try {
+        const response = await reportService.statisticsRevenue(option)
+        return res.status(200).json(response)
+    } catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+
 module.exports = {
     getRevenueByMonth,
     getCapitalByMonth,
     startBox,
     reportUser,
     reportPost,
-    reportProduct
+    reportProduct,
+    statisticsRevenue
 }

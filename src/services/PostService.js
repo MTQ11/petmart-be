@@ -1,4 +1,5 @@
 const Post = require("../models/PostModel")
+const Comment = require("../models/CommentModel")
 const bcrypt = require("bcrypt")
 const { generalAccessToken, generalRefreshAccessToken } = require("./JwtService")
 
@@ -97,6 +98,7 @@ const updatePost = (id,data) => {
 const deletePost = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
+            await Comment.deleteMany({ post: id });
             const checkPost = Post.findOne({ _id: id })
             if (checkPost === null) {
                 resolve({

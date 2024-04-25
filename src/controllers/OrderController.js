@@ -2,8 +2,8 @@ const OrderService = require('../services/OrderService')
 
 const getAllOrder = async (req, res) => {
     try {
-        const {limit, page} = req.query
-        const response = await OrderService.getAllOrder(Number(limit) || null, Number(page))
+        const {limit, page, sort, filter, keysearch} = req.query
+        const response = await OrderService.getAllOrder(Number(limit) || 0, Number(page) || 0, sort, filter, keysearch)
         return res.status(200).json(response)
     } catch (e) {
         return res.status(404).json({
@@ -86,10 +86,31 @@ const cancelOrder = async (req, res) => {
     }
 }
 
+const confirmOrder = async (req, res) => {    
+    try {
+        const orderID = req.params.id
+        if (!orderID) {
+            return res.status(400).json({
+                status: 'ERR',
+                message: 'The orderId is required'
+
+            })
+        }
+        const request = await OrderService.confirmOrder(orderID)
+        return res.status(200).json(request)
+    }
+    catch (error) {
+        return res.status(404).json({
+            message: error
+        })
+    }
+}
+
 module.exports = {
     getAllOrder,
     createOrder,
     getDetailsOrder,
     getAllOrderDetails,
-    cancelOrder
+    cancelOrder,
+    confirmOrder
 }
