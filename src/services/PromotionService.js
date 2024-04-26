@@ -2,18 +2,33 @@ const Promotion = require("../models/PromotionModel")
 const bcrypt = require("bcrypt")
 const { generalAccessToken, generalRefreshAccessToken } = require("./JwtService")
 
-const getAll = (limit,page) => {
+const getAll = (limit, page, keysearch) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const totalItem = await Promotion.countDocuments()
-            const totalPage = Math.ceil(totalItem/limit)
-            if(page+1>totalPage){
+            let totalItem = await Promotion.countDocuments()
+            let totalPage = Math.ceil(totalItem / limit)
+            if (keysearch) {
+                const escapedValue = keysearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(escapedValue, 'i');
+                const dataFilter = await Promotion.find({ name: regex });
+                totalItem = dataFilter.length;
+                resolve({
+                    status: "OK",
+                    message: "Success",
+                    data: dataFilter,
+                    total: totalItem,
+                    pageCurrent: 1,
+                    totalPage: 1,
+                });
+            }
+
+            if (page + 1 > totalPage) {
                 resolve({
                     status: "ERR",
                     message: "This page is not available",
                 })
             }
-            const data = await Promotion.find().limit(limit).skip(limit*page).exec()
+            const data = await Promotion.find().limit(limit).skip(limit * page).exec()
             resolve({
                 status: "OK",
                 message: "SUCCESS",
@@ -24,17 +39,17 @@ const getAll = (limit,page) => {
             })
         }
         catch (e) {
-            reject(e)
+            console.log(e)
         }
     })
 }
 
 const createPromotion = (data) => {
     return new Promise(async (resolve, reject) => {
-        const { name, startday, endday, discount, note} = data
-        const checkPromotion = await Promotion.findOne({name})
+        const { name, startday, endday, discount, note } = data
+        const checkPromotion = await Promotion.findOne({ name })
         try {
-            if(checkPromotion){
+            if (checkPromotion) {
                 resolve({
                     status: "ERR",
                     message: "Promotion already exists"
@@ -57,11 +72,11 @@ const createPromotion = (data) => {
     })
 }
 
-const updatePromotion = (id,data) => {
+const updatePromotion = (id, data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const checkPromotion = await Promotion.findOne({_id: id}).exec()
-            if(!checkPromotion){
+            const checkPromotion = await Promotion.findOne({ _id: id }).exec()
+            if (!checkPromotion) {
                 resolve({
                     status: "ERR",
                     message: "Promotion not exists"

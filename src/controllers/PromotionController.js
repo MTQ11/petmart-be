@@ -3,8 +3,8 @@ const JwtService = require('../services/JwtService')
 
 const getAll = async (req, res) => {    
     try {
-        const {limit, page} = req.query
-        const response = await promotionService.getAll(Number(limit) || null, Number(page))
+        const {limit, page, keysearch} = req.query
+        const response = await promotionService.getAll(Number(limit) || null, Number(page), keysearch)
         return res.status(200).json(response)
     }
     catch (error) {
