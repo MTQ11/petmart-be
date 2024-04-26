@@ -20,8 +20,8 @@ const getAllOrder = (limit, page, sort, filter, keysearch) => {
           message: "Success",
           data: dataFilter,
           total: dataFilter.length,
-          pageCurrent: Number(page + 1),
-          totalPage: totalPage,
+          pageCurrent: 1,
+          totalPage: 1,
         });
       }
       if (keysearch) {
@@ -91,7 +91,6 @@ const createOrder = (newOrder) => {
     try {
       const { orderItems, paymentMethod, itemsPrice, shippingPrice, totalPrice, shippingAddress, user, isPaid, paidAt, email } = newOrder;
 
-      // Xử lý các promise trong mảng orderItems
       const promises = orderItems.map(async (order) => {
         const productData = await Product.findOneAndUpdate(
           {
@@ -278,7 +277,7 @@ const confirmOrder = async (orderId) => {
         data: order,
       });
     } catch (error) {
-      reject(error);
+      console.log(error);
     }
   })
 };

@@ -15,15 +15,13 @@ const getAll = (limit, page, sort, filter, keysearch) => {
         const escapedValue = filter[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
         const regex = new RegExp(escapedValue, 'i');
         const dataFilter = await Product.find({ [label]: filter[1] });
-        let totalItem = dataFilter.length
-        let totalPage = Math.ceil(totalItem / limit);
         resolve({
           status: "OK",
           message: "Success",
           data: dataFilter,
           total: dataFilter.length,
-          pageCurrent: Number(page + 1),
-          totalPage: totalPage,
+          pageCurrent: 1,
+          totalPage: 1,
         });
       }
       if (keysearch) {

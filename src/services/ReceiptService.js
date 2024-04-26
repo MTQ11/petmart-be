@@ -74,8 +74,8 @@ const getAllReceipt = (limit, page, sort, filter, keysearch) => {
           message: "Success",
           data: dataFilter,
           total: dataFilter.length,
-          pageCurrent: Number(page + 1),
-          totalPage: totalPage,
+          pageCurrent: 1,
+          totalPage: 1,
         });
       }
       if (keysearch) {

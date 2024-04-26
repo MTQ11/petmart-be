@@ -205,8 +205,8 @@ const getAllCustomer = (limit, page, sort, filter, keysearch) => {
                     message: "Success",
                     data: dataFilter,
                     total: dataFilter.length,
-                    pageCurrent: Number(page + 1),
-                    totalPage: totalPage,
+                    pageCurrent: 1,
+                    totalPage: 1,
                 });
             }
             if (sort) {
@@ -225,9 +225,11 @@ const getAllCustomer = (limit, page, sort, filter, keysearch) => {
             if (keysearch) {
                 const escapedValue = keysearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const regex = new RegExp(escapedValue, 'i');
-                query['information.name'] = regex; // Thêm điều kiện tìm kiếm trong trường 'information.name'
+                query.$or = [
+                    { 'information.name': regex },
+                    { 'email': regex }
+                ];
             }
-
             if (page + 1 > totalPage) {
                 resolve({
                     status: "ERR",
@@ -270,8 +272,8 @@ const getAllMember = (limit, page, sort, filter, keysearch) => {
                     message: "Success",
                     data: dataFilter,
                     total: dataFilter.length,
-                    pageCurrent: Number(page + 1),
-                    totalPage: totalPage,
+                    pageCurrent: 1,
+                    totalPage: 1,
                 });
             }
             if (sort) {
@@ -290,9 +292,11 @@ const getAllMember = (limit, page, sort, filter, keysearch) => {
             if (keysearch) {
                 const escapedValue = keysearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const regex = new RegExp(escapedValue, 'i');
-                query['information.name'] = regex; // Thêm điều kiện tìm kiếm trong trường 'information.name'
+                query.$or = [
+                    { 'information.name': regex },
+                    { 'email': regex }
+                ];
             }
-
             if (page + 1 > totalPage) {
                 resolve({
                     status: "ERR",
