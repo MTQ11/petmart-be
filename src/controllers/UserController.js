@@ -158,8 +158,6 @@ const getAllCustomer = async (req, res) => {
 const getAllMember = async (req, res) => {
     try {
         const { limit, page, sort, filter, keysearch } = req.query
-        console.log("keysearch",keysearch)
-        console.log(limit, page, sort, filter, keysearch)
         const response = await userService.getAllMember(Number(limit) || 0, Number(page) || 0, sort, filter, keysearch)
         return res.status(200).json(response)
     }

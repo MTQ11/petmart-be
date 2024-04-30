@@ -33,14 +33,15 @@ const getAll = (limit, page, sort, filter, keysearch) => {
             { idProduct: regex }
           ]
         });
-        totalItem = dataFilter.length
+        let totalItem = dataFilter.length;
+        let totalPage = Math.ceil(totalItem / limit);
         resolve({
           status: "OK",
           message: "Success",
           data: dataFilter,
           total: totalItem,
-          // pageCurrent: Number(page + 1),
-          // totalPage: totalPage,
+          pageCurrent: Number(page + 1),
+          totalPage: totalPage,
         });
       }
       if (sort) {

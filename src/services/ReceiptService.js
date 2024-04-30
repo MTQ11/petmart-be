@@ -56,7 +56,6 @@ const createReceipt = async (receiptData) => {
   }
 };
 
-
 const getAllReceipt = (limit, page, sort, filter, keysearch) => {
   return new Promise(async (resolve, reject) => {
     try {
