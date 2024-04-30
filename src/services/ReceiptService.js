@@ -136,7 +136,7 @@ const getAllReceipt = (limit, page, sort, filter, keysearch) => {
       })
     }
     catch (e) {
-      console.log(e)
+      reject(e);
     }
   })
 }

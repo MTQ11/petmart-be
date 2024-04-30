@@ -225,10 +225,17 @@ const getAllCustomer = (limit, page, sort, filter, keysearch) => {
             if (keysearch) {
                 const escapedValue = keysearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const regex = new RegExp(escapedValue, 'i');
-                query.$or = [
-                    { 'information.name': regex },
-                    { 'email': regex }
-                ];
+                query.$and = [{ $or: [{ 'information.name': regex }, { 'email': regex }] }];
+                console.log(query)
+                const data = await User.find(query).limit(limit).skip(limit * page).exec();
+                resolve({
+                    status: "OK",
+                    message: "SUCCESS",
+                    data: data,
+                    total: totalItem,
+                    pageCurrent: Number(page + 1),
+                    totalPage: totalPage
+                });
             }
             if (page + 1 > totalPage) {
                 resolve({
@@ -259,14 +266,15 @@ const getAllMember = (limit, page, sort, filter, keysearch) => {
             let query = { $or: [{ role: 'admin' }, { role: 'member' }] }; // Điều kiện tìm kiếm admin hoặc member
             let totalItem = await User.countDocuments(query);
             const totalPage = Math.ceil(totalItem / limit);
+
             if (filter) {
                 const label = filter[0];
                 const escapedValue = filter[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
                 const regex = new RegExp(escapedValue, 'i');
                 query[label] = regex; // Thêm điều kiện filter vào query
+                console.log(query); // In ra giá trị sau khi thêm điều kiện filter
+
                 const dataFilter = await User.find(query);
-                let totalItem = dataFilter.length
-                let totalPage = Math.ceil(totalItem / limit);
                 resolve({
                     status: "OK",
                     message: "Success",
@@ -275,7 +283,25 @@ const getAllMember = (limit, page, sort, filter, keysearch) => {
                     pageCurrent: 1,
                     totalPage: 1,
                 });
+                return;
             }
+
+            if (keysearch) {
+                const escapedValue = keysearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const regex = new RegExp(escapedValue, 'i');
+                query.$and = [{ $or: [{ 'information.name': regex }, { 'email': regex }] }];
+                const data = await User.find(query).limit(limit).skip(limit * page).exec();
+                resolve({
+                    status: "OK",
+                    message: "SUCCESS",
+                    data: data,
+                    total: totalItem,
+                    pageCurrent: Number(page + 1),
+                    totalPage: totalPage
+                });
+                return;
+            }
+
             if (sort) {
                 const objectSort = {};
                 objectSort[sort[1]] = sort[0];
@@ -288,23 +314,10 @@ const getAllMember = (limit, page, sort, filter, keysearch) => {
                     pageCurrent: Number(page + 1),
                     totalPage: Math.ceil(totalItem / limit),
                 });
-            }
-            if (keysearch) {
-                const escapedValue = keysearch.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const regex = new RegExp(escapedValue, 'i');
-                query.$or = [
-                    { 'information.name': regex },
-                    { 'email': regex }
-                ];
-            }
-            if (page + 1 > totalPage) {
-                resolve({
-                    status: "ERR",
-                    message: "This page is not available",
-                });
                 return;
             }
 
+            // Trả về dữ liệu theo trang
             const data = await User.find(query).limit(limit).skip(limit * page).exec();
             resolve({
                 status: "OK",
@@ -319,6 +332,8 @@ const getAllMember = (limit, page, sort, filter, keysearch) => {
         }
     });
 };
+
+
 
 const getDetailsUser = (id, data) => {
     return new Promise(async (resolve, reject) => {
