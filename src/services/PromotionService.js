@@ -39,7 +39,7 @@ const getAll = (limit, page, keysearch) => {
             })
         }
         catch (e) {
-            console.log(e)
+            reject(e)
         }
     })
 }
